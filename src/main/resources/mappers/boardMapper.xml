@@ -2,9 +2,29 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
   <mapper namespace="org.kb141.mapper.BoardMapper">
   
   <select id="getList" resultType="BoardVO">
   		select * from tbl_board order by bno desc
   </select>
+   
+  <insert id="create" parameterType="BoardVO">
+  		insert into tbl_board(bno,btitle,bcontent,bwriter,bsong,bsinger)
+			values(seq_bno.nextval,#{btitle},#{bcontent},#{bwriter},#{bsong},#{bsinger})
+  </insert>
+  
+  <select id="read" resultType="BoardVO">
+  		select * from tbl_board where bno = #{bno}
+  </select>
+  
+  <update id="update" parameterType="BoardVO">
+  		update tbl_board set btitle=#{btitle},BCONTENT=#{bcontent},BWRITER=#{bwriter},BSONG=#{bsong},BSINGER=#{bsinger} where bno = #{bno}
+  </update>
+  
+  <delete id="delete">
+  		delete from tbl_board where bno = #{bno}
+  </delete>
+  
+  
   </mapper>

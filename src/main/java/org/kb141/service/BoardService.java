@@ -9,9 +9,9 @@ public interface BoardService {
 	
 	public List<BoardVO> showList();
 	public void register(BoardVO vo , FileVO fvo);
-	public void view(Integer in);
-	public void modify(BoardVO vo); 
-	public void remove(Integer in);
+	public BoardVO view(Integer bno);
+	public void modify(BoardVO vo, FileVO fvo); 
+	public void remove(Integer bno);
 	
 
 

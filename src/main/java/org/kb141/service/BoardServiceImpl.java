@@ -49,34 +49,41 @@ public class BoardServiceImpl implements BoardService{
 	
 	@Transactional
 	@Override
-	public void view(Integer in){
+	public BoardVO view(Integer bno){
+		
+		BoardVO vo = null;
+		
 		try{
-			dao.read(in);
+			 vo = dao.read(bno);
+		
 		}catch(Throwable e){
 			e.printStackTrace();
-			
+
 		}
 		
-		
+		return vo;
 		
 		
 	}
 	@Transactional
 	@Override
-	public void modify(BoardVO vo) {
-		
+	public void modify(BoardVO vo,FileVO fvo) {
+		// 수정하는 부분 
 		try{
 			dao.update(vo);
+			fdao.update(fvo);
 		}catch(Throwable e){
 			e.printStackTrace();
 			
 		}
 	}
+	
+	
 	@Transactional
 	@Override
-	public void remove(Integer in) {
+	public void remove(Integer bno) {
 		try{
-			dao.delete(in);
+			dao.delete(bno);
 		}catch(Throwable e){
 			e.printStackTrace();
 			

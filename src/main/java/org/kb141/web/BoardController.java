@@ -1,7 +1,9 @@
 package org.kb141.web;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,6 +40,7 @@ public class BoardController {
 	@Inject
 	private BoardService service;
 	
+	@CrossOrigin
 	@PostMapping(value = "/uploadFile" , produces ="application/json; charset=utf-8" )
 	@ResponseBody // 같은 이름의 jsp 실행시키지 말고, 지금 내가 주는 건 순수한 문자열이라는 뜻. 
 	public ID3v2 uploadFile(MultipartFile file) throws Exception{
@@ -64,45 +68,27 @@ public class BoardController {
 		Mp3File songData = new Mp3File(filePath);
 		
 		ID3v2 songTags = songData.getId3v2Tag();
-		
-		
-//		filePath = c:\\zzz\\b84ffb75-1e3d-41c1-8035-7e624de38dbc_leessang.mp3
-//		filePath = c:\\zzz\\b84ffb75-1e3d-41c1-8035-7e624de38dbc_leessang.jpg
-		
-//		aef48625-e3ed-4e78-b8d8-4e5b5f64cad3_leessang
-//		aef48625-e3ed-4e78-b8d8-4e5b5f64cad3_leessang
-		
-		
-//		BufferedImage bos = new ImageIO.read(bis);
-		
+
 		songTags.getAlbumImage(); //byte[]  이미지를 
 		String imgPath = filePath.substring(0, filePath.length()-4)+".jpg";
 		System.out.println(imgPath);
 		
+		logger.info(songTags.getArtist());
+		
+		songTags.setItunesComment(imgPath);
+		
 		FileUtils.writeByteArrayToFile(new File(imgPath), songTags.getAlbumImage());
 		
-		
-//		2edd4b74-ee8e-44da-a716-fda5831d19be_fallin.mp3
-//		2edd4b74-ee8e-44da-a716-fda5831d19be_fallin.jpg
-		
-		
-//		MP3TagVO mptags = new MP3TagVO();
-//		
-//		mptags.setArtist(songTags.getArtist());
-//		mptags.setTitle(songTags.getTitle());
-//		mptags.setAlbumArt(songTags.getAlbumImage());
-//		
-//		return mptags;
-//		
 		return songTags;
-		
-//		artist
-//		title
-//		albumImage
-		
 	}
 	
-	
+	@CrossOrigin
+	@PostMapping(value="/getimage", produces={"image/jpg"})
+	public @ResponseBody byte[] download(String name) throws Exception {
+		InputStream in = new FileInputStream(name);
+		
+		return IOUtils.toByteArray(in);
+	}
 	
 	
 	

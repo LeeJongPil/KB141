@@ -7,7 +7,7 @@
   <mapper namespace="org.kb141.mapper.FileMapper">
   
   <insert id="create" parameterType="FileVO">
-  insert into TBL_FILE(bno,bfile) values (seq_fno.nextval,#{bfile})
+  insert into TBL_FILE(bno,bfile) values (seq_bno.currval,#{bfile})
   </insert>
   
   <select id="read" resultType="FileVO">

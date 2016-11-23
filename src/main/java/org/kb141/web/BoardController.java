@@ -1,11 +1,13 @@
 package org.kb141.web;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.kb141.domain.BoardVO;
 import org.kb141.domain.FileVO;
@@ -22,6 +24,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.Mp3File;
+
 @CrossOrigin
 @RestController
 @Controller
@@ -32,27 +37,73 @@ public class BoardController {
 	@Inject
 	private BoardService service;
 	
-	@PostMapping("/uploadFile")
-	@ResponseBody // ì´ê²ƒì„ í•˜ë©´ ìˆœìˆ˜í•œ ë¬¸ìì—´ì´ë¼ê³  ì•Œë ¤ì¤€ë‹¤.
-	public String uploadFile(MultipartFile file)throws Exception {
-
-		UUID uid = UUID.randomUUID(); // ìœ ë‹ˆí¬í•œ ê°’ì„ ì£¼ê¸°ìœ„í•´ì„œ UUID ë¼ëŠ”ê±¸ ì“´ë‹¤.
-		String fileName = file.getOriginalFilename();
-		String uploadName = uid + "_senyo_" + fileName;	
-
-		FileOutputStream fos = new FileOutputStream("E:\\zzz\\" + uploadName);
+	@PostMapping(value = "/uploadFile" , produces ="application/json; charset=utf-8" )
+	@ResponseBody // °°Àº ÀÌ¸§ÀÇ jsp ½ÇÇà½ÃÅ°Áö ¸»°í, Áö±İ ³»°¡ ÁÖ´Â °Ç ¼ø¼öÇÑ ¹®ÀÚ¿­ÀÌ¶ó´Â ¶æ. 
+	public ID3v2 uploadFile(MultipartFile file) throws Exception{
+		// springÀº µé¾î¿À´Â µ¥ÀÌÅÍ°¡ multipart µ¥ÀÌÅÍ¸é ÀÚµ¿À¸·Î Ã³¸®ÇØ ÁØ´Ù.
+		// Áö±İ ajaxÀÎµ¥ ¹» ¸®ÅÏÇÒ·¡? json or text
+		// UUID ºÙÀº ÆÄÀÏ¸íÀ» show·Î º¸³»ÀÚ. 
+		logger.info("fileName : " + file.getOriginalFilename( ));
 		
-		// db ì— ì €ì¥í•  ë•Œ, 11.mp3 
-		// e://zzz//11.mp3
-
-		IOUtils.copy(file.getInputStream(), fos);
+		UUID uid = UUID.randomUUID();
+		
+		String fileName = new String(file.getOriginalFilename().getBytes("UTF-8"), "UTF-8");	// ¿øº»ÀÌ¸§
+		
+		String uploadName = uid+"_"+fileName;
+		
+		String filePath = "C:\\zzz\\"+uploadName;
+		
+		System.out.println(filePath);
+		
+		FileOutputStream fos = new FileOutputStream(filePath);
+		
+		IOUtils.copy(file.getInputStream(),fos);
 		
 		fos.close();
-
-		// UUID ê°€ ìˆëŠ”ê±° ê¹Œì§€ ë¦¬í„´í•´ì¤˜ì•¼ í•œë‹¤.
-		return uploadName;
+		
+		Mp3File songData = new Mp3File(filePath);
+		
+		ID3v2 songTags = songData.getId3v2Tag();
+		
+		
+//		filePath = c:\\zzz\\b84ffb75-1e3d-41c1-8035-7e624de38dbc_leessang.mp3
+//		filePath = c:\\zzz\\b84ffb75-1e3d-41c1-8035-7e624de38dbc_leessang.jpg
+		
+//		aef48625-e3ed-4e78-b8d8-4e5b5f64cad3_leessang
+//		aef48625-e3ed-4e78-b8d8-4e5b5f64cad3_leessang
+		
+		
+//		BufferedImage bos = new ImageIO.read(bis);
+		
+		songTags.getAlbumImage(); //byte[]  ÀÌ¹ÌÁö¸¦ 
+		String imgPath = filePath.substring(0, filePath.length()-4)+".jpg";
+		System.out.println(imgPath);
+		
+		FileUtils.writeByteArrayToFile(new File(imgPath), songTags.getAlbumImage());
+		
+		
+//		2edd4b74-ee8e-44da-a716-fda5831d19be_fallin.mp3
+//		2edd4b74-ee8e-44da-a716-fda5831d19be_fallin.jpg
+		
+		
+//		MP3TagVO mptags = new MP3TagVO();
+//		
+//		mptags.setArtist(songTags.getArtist());
+//		mptags.setTitle(songTags.getTitle());
+//		mptags.setAlbumArt(songTags.getAlbumImage());
+//		
+//		return mptags;
+//		
+		return songTags;
+		
+//		artist
+//		title
+//		albumImage
 		
 	}
+	
+	
+	
 	
 	
 	@CrossOrigin

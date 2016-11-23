@@ -18,7 +18,7 @@ public class FileInfoTest {
 	
 	@Before
 	public void set() throws Exception {
-		filePath = "E:\\zzz\\hwayak.mp3";
+		filePath = "C:\\zzz\\hwayak.mp3";
 		songData = new Mp3File(filePath);
 		
 //		songData = new mp3
@@ -33,7 +33,8 @@ public class FileInfoTest {
 		System.out.println(songTags.getAlbum());
 		System.out.println(songTags.getYear());
 		System.out.println(songTags.getAlbumImage());
-				
+		
+		
 		
 	}
 	

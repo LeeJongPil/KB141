@@ -21,7 +21,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations = { "file:src/main/webapp/WEB-INF/spring/root-context.xml" })
 public class DBTester {
 
-	@Inject // 데이터 소스를 내려 달라고 하는 거다.
+	@Inject // �뜲�씠�꽣 �냼�뒪瑜� �궡�젮 �떖�씪怨� �븯�뒗 嫄곕떎.
 	private DataSource ds;
 
 	@Inject
@@ -44,7 +44,7 @@ public class DBTester {
 		
 		BoardVO vo = new BoardVO();
 
-		vo.setBtitle("ㅇㅇㅇㅇ");
+		vo.setBtitle("�뀋�뀋�뀋�뀋");
 		vo.setBcontent("asefskjd");
 		vo.setBwriter("sdfks");
 		vo.setBsong("sdf");
@@ -65,7 +65,7 @@ public class DBTester {
 	public void updateTest() throws Exception{
 		BoardVO vo = new BoardVO();
 
-		vo.setBtitle("ㅇㅇㅇㅇ");
+		vo.setBtitle("�뀋�뀋�뀋�뀋");
 		vo.setBcontent("asefskjd");
 		vo.setBwriter("sdfks");
 		vo.setBsong("sdf");
@@ -87,8 +87,8 @@ public class DBTester {
 		ReplyVO vo = new ReplyVO();
 		
 		vo.setBno(23);
-		vo.setRwrite("난리플");
-		vo.setRcontent("난리플내용");
+		vo.setRwrite("�궃由ы뵆");
+		vo.setRcontent("�궃由ы뵆�궡�슜");
 	
 		rdao.create(vo);
 		
@@ -105,8 +105,8 @@ public class DBTester {
 		ReplyVO vo = new ReplyVO();
 
 		vo.setBno(1233);
-		vo.setRcontent("내용이다");
-		vo.setRwrite("내용바뀌였다");
+		vo.setRcontent("�궡�슜�씠�떎");
+		vo.setRwrite("�궡�슜諛붾�뚯��떎");
 		vo.setRno(48);
 		System.out.println(vo);
 		rdao.update(vo);
@@ -133,7 +133,7 @@ public class DBTester {
 		FileVO vo = new FileVO();
 
 		vo.setBno(123);
-		vo.setBfile("파일경로");
+		vo.setBfile("�뙆�씪寃쎈줈");
 		
 		System.out.println(vo);
 		fdao.create(vo);
@@ -151,7 +151,7 @@ public class DBTester {
 	public void updatefileTest() throws Exception{
 		FileVO vo = new FileVO();
 		
-		vo.setBfile("바뀐내용");
+		vo.setBfile("諛붾�먮궡�슜");
 		vo.setBno(1);
 		
 		fdao.update(vo);
@@ -177,7 +177,7 @@ public class DBTester {
 
 		Class.forName("oracle.jdbc.driver.OracleDriver");
 
-		Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "bit88", "bit88");
+		Connection con = DriverManager.getConnection("jdbc:oracle:thin:@192.168.0.13:1521:xe", "bit88", "bit88");
 
 		System.out.println(con);
 		con.close();

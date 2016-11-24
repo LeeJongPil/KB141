@@ -12,6 +12,8 @@ public class BoardVO {
 	private String bsinger;
 	private Date regdate, updatedate;
 
+	private String bfile;
+	
 	public BoardVO(){
 		super();
 	}
@@ -97,12 +99,29 @@ public class BoardVO {
 	public void setUpdatedate(Date updatedate) {
 		this.updatedate = updatedate;
 	}
+	
+	
+
+
+
+
+	public String getBfile() {
+		return bfile;
+	}
+
+
+	public void setBfile(String bfile) {
+		this.bfile = bfile;
+	}
+
 
 	@Override
 	public String toString() {
 		return "BoardVO [bno=" + bno + ", bcnt=" + bcnt + ", btitle=" + btitle + ", bcontent=" + bcontent + ", bwriter="
 				+ bwriter + ", bsong=" + bsong + ", bsinger=" + bsinger + ", regdate=" + regdate + ", updatedate="
-				+ updatedate + "]";
+				+ updatedate + ", bfile=" + bfile + "]";
 	}
+
+
 
 }

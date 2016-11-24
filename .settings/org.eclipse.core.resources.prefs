@@ -1,3 +1,5 @@
 eclipse.preferences.version=1
+encoding//src/main/java/org/kb141/service/BoardServiceImpl.java=UTF-8
 encoding//src/main/webapp/WEB-INF/views/dnd.jsp=UTF-8
 encoding//src/test/java/org/kb141/web/DBTester.java=UTF-8
+encoding//src/test/java/org/kb141/web/ServiceTest.java=UTF-8

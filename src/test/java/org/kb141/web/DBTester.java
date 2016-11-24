@@ -58,7 +58,7 @@ public class DBTester {
 	@Test
 	public void readTest() throws Exception{
 		
-		dao.read(41);	
+		System.out.println(dao.read(115));	
 	}
 	
 	@Test

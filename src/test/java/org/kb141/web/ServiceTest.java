@@ -1,5 +1,6 @@
 package org.kb141.web;
 
+import java.io.File;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -92,9 +93,29 @@ public class ServiceTest {
 	@Test
 	public void remove() {
 
-		service.remove(1);
+		service.remove(2);
 	}
 
+	
+	@Test
+	public void removeALL(){
+		
+		String fileName = service.getFileName(5);
+		service.remove(5);
+		File delJpgFile = new File("E:\\zzz\\mp3server\\" + fileName +".jpg");
+		File delMp3File = new File("E:\\zzz\\mp3server\\" + fileName +".mp3");
+		
+		if(delMp3File.delete() && delJpgFile.delete()){
+		
+			System.out.println("s");
+		}
+		else{
+
+			System.out.println("n");
+		}
+	}
+	
+	
 	/*
 	 * public void register(BoardVO vo , FileVO fvo); public void view(Integer
 	 * num); public void modify(BoardVO vo, FileVO fvo); public void

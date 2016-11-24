@@ -82,10 +82,38 @@ public class BoardServiceImpl implements BoardService {
 	public void remove(Integer bno) {
 		try {
 			dao.delete(bno);
+			fdao.delete(bno);
+
+			
 		} catch (Throwable e) {
 			e.printStackTrace();
 
 		}
 	}
 
+	@Override
+	public String getFileName(Integer bno) {
+
+		FileVO vo = null;
+		
+		try{
+			
+			vo = fdao.read(bno);
+			
+			
+			
+		}catch(Throwable e){
+			e.printStackTrace();
+		}
+		
+		
+		return vo.getBfile();
+	}
+
+	
+	
+	
+	
+	
+	
 }

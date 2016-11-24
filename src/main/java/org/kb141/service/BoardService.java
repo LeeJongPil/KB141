@@ -12,7 +12,7 @@ public interface BoardService {
 	public BoardVO view(Integer bno);
 	public void modify(BoardVO vo, FileVO fvo); 
 	public void remove(Integer bno);
-	
+	public String getFileName(Integer bno);
 
 
 }

@@ -17,6 +17,7 @@ import org.kb141.service.BoardService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,21 +43,21 @@ public class BoardController {
 	
 	@CrossOrigin
 	@PostMapping(value = "/uploadFile" , produces ="application/json; charset=utf-8" )
-	@ResponseBody // °°Àº ÀÌ¸§ÀÇ jsp ½ÇÇà½ÃÅ°Áö ¸»°í, Áö±Ý ³»°¡ ÁÖ´Â °Ç ¼ø¼öÇÑ ¹®ÀÚ¿­ÀÌ¶ó´Â ¶æ. 
+	@ResponseBody // ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ jsp ï¿½ï¿½ï¿½ï¿½ï¿½Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½Ì¶ï¿½ï¿½ ï¿½ï¿½. 
 	public ID3v2 uploadFile(MultipartFile file) throws Exception{
-		// springÀº µé¾î¿À´Â µ¥ÀÌÅÍ°¡ multipart µ¥ÀÌÅÍ¸é ÀÚµ¿À¸·Î Ã³¸®ÇØ ÁØ´Ù.
-		// Áö±Ý ajaxÀÎµ¥ ¹» ¸®ÅÏÇÒ·¡? json or text
-		// UUID ºÙÀº ÆÄÀÏ¸íÀ» show·Î º¸³»ÀÚ. 
+		// springï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ multipart ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½.
+		// ï¿½ï¿½ï¿½ï¿½ ajaxï¿½Îµï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ò·ï¿½? json or text
+		// UUID ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½ showï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. 
 		logger.info("fileName : " + file.getOriginalFilename( ));
 		
 		UUID uid = UUID.randomUUID();
 		
-		String fileName = new String(file.getOriginalFilename().getBytes("UTF-8"), "UTF-8");	// ¿øº»ÀÌ¸§
+		String fileName = new String(file.getOriginalFilename().getBytes("UTF-8"), "UTF-8");	// ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½
 		
 		String uploadName = uid+"_"+fileName;
 		
 		// uploadName -> uid
-		String filePath = "C:\\zzz\\"+uid + ".mp3";
+		String filePath = "E:\\zzz\\mp3server\\"+uid + ".mp3";
 		
 		System.out.println(filePath);
 		
@@ -70,7 +71,7 @@ public class BoardController {
 		
 		ID3v2 songTags = songData.getId3v2Tag();
 
-		songTags.getAlbumImage(); //byte[]  ÀÌ¹ÌÁö¸¦ 
+		songTags.getAlbumImage(); //byte[]  ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ 
 		String imgPath = filePath.substring(0, filePath.length()-4)+".jpg";
 		System.out.println(imgPath);
 		
@@ -86,7 +87,7 @@ public class BoardController {
 	@CrossOrigin
 	@GetMapping(value="/getimage", produces={"image/jpg"})
 	public @ResponseBody byte[] download(String name) throws Exception {
-		InputStream in = new FileInputStream("C:\\zzz\\"+name+".jpg");
+		InputStream in = new FileInputStream("E:\\zzz\\mp3server\\"+name+".jpg");
 		
 		return IOUtils.toByteArray(in);
 	}
@@ -95,7 +96,7 @@ public class BoardController {
 	@CrossOrigin
 	@GetMapping(value="/getmp3", produces={"audio/mpeg"})
 	public @ResponseBody byte[] downloadMp3(String name) throws Exception {
-		InputStream in = new FileInputStream("C:\\zzz\\"+name+".mp3");
+		InputStream in = new FileInputStream("E:\\zzz\\mp3server\\"+name+".mp3");
 		
 		return IOUtils.toByteArray(in);
 	}
@@ -142,13 +143,23 @@ public class BoardController {
 		return "success..";
 	}
 	
+	
 	@CrossOrigin
 	@PostMapping("/remove")
 	public String removeBoard(Integer num){
+		// bnoë¡œ  bfile ê°€ì§€ê³  ì˜¤ê³ ,
 		
+		String fileName = service.getFileName(num);
 		service.remove(num);
-
-		return "sucess..";
+		File delJpgFile = new File("E:\\zzz\\mp3server\\" + fileName +".jpg");
+		File delMp3File = new File("E:\\zzz\\mp3server\\" + fileName +".mp3");
+		
+		if(delMp3File.delete() && delJpgFile.delete()){
+		
+			return "success";
+		}
+		return "fail";
+					
 	}
 	
 	

@@ -55,7 +55,8 @@ public class BoardController {
 		
 		String uploadName = uid+"_"+fileName;
 		
-		String filePath = "C:\\zzz\\"+uploadName;
+		// uploadName -> uid
+		String filePath = "C:\\zzz\\"+uid + ".mp3";
 		
 		System.out.println(filePath);
 		
@@ -75,7 +76,7 @@ public class BoardController {
 		
 		logger.info(songTags.getArtist());
 		
-		songTags.setItunesComment(imgPath);
+		songTags.setItunesComment(uid+".jpg");
 		
 		FileUtils.writeByteArrayToFile(new File(imgPath), songTags.getAlbumImage());
 		
@@ -83,9 +84,9 @@ public class BoardController {
 	}
 	
 	@CrossOrigin
-	@PostMapping(value="/getimage", produces={"image/jpg"})
+	@GetMapping(value="/getimage", produces={"image/jpg"})
 	public @ResponseBody byte[] download(String name) throws Exception {
-		InputStream in = new FileInputStream(name);
+		InputStream in = new FileInputStream("C:\\zzz\\"+name);
 		
 		return IOUtils.toByteArray(in);
 	}

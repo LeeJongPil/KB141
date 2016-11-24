@@ -7,25 +7,29 @@
 
 	<select id="getList" resultType="BoardVO">
 		select
-		tbl_board.bno, btitle, bcontent, bwriter, bsong, bsinger, regdate, updatedate, bfile
+			tbl_board.bno, btitle, bcontent, bwriter, bsong, bsinger, regdate,updatedate, bfile
 		from
-		tbl_board, tbl_file
+			tbl_board, tbl_file
 		where
-		tbl_board.bno = tbl_file.bno
+			tbl_board.bno = tbl_file.bno
+		order by tbl_board.bno desc
 	</select>
 
 	<insert id="create" parameterType="BoardVO">
-		insert into tbl_board(bno,btitle,bcontent,bwriter,bsong,bsinger)
+		insert into
+		tbl_board(bno,btitle,bcontent,bwriter,bsong,bsinger)
 		values(seq_bno.nextval,#{btitle},#{bcontent},#{bwriter},#{bsong},#{bsinger})
 	</insert>
 
 	<select id="read" resultType="BoardVO">
 		select
-		tbl_board.bno, btitle, bcontent, bwriter, bsong, bsinger, regdate, updatedate, bfile
+		tbl_board.bno, btitle,
+		bcontent, bwriter, bsong, bsinger, regdate, updatedate, bfile
 		from
 		tbl_board, tbl_file
 		where
-		tbl_board.bno = tbl_file.bno and tbl_file.bno = #{bno}
+		tbl_board.bno = tbl_file.bno and tbl_file.bno
+		= #{bno}
 	</select>
 
 	<update id="update" parameterType="BoardVO">

@@ -76,7 +76,7 @@ public class BoardController {
 		
 		logger.info(songTags.getArtist());
 		
-		songTags.setItunesComment(uid+".jpg");
+		songTags.setItunesComment(uid+"");
 		
 		FileUtils.writeByteArrayToFile(new File(imgPath), songTags.getAlbumImage());
 		
@@ -86,10 +86,20 @@ public class BoardController {
 	@CrossOrigin
 	@GetMapping(value="/getimage", produces={"image/jpg"})
 	public @ResponseBody byte[] download(String name) throws Exception {
-		InputStream in = new FileInputStream("C:\\zzz\\"+name);
+		InputStream in = new FileInputStream("C:\\zzz\\"+name+".jpg");
 		
 		return IOUtils.toByteArray(in);
 	}
+	
+	
+	@CrossOrigin
+	@GetMapping(value="/getmp3", produces={"audio/mpeg"})
+	public @ResponseBody byte[] downloadMp3(String name) throws Exception {
+		InputStream in = new FileInputStream("C:\\zzz\\"+name+".mp3");
+		
+		return IOUtils.toByteArray(in);
+	}
+	
 	
 	
 	

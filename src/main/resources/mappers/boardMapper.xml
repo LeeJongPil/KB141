@@ -5,6 +5,24 @@
 
 <mapper namespace="org.kb141.mapper.BoardMapper">
 
+	
+<select id="getScroll" resultType="BoardVO">
+    select * from (
+    select
+        rownum rn, bno, btitle, bcontent, bwriter, bsong, bsinger, regdate,updatedate, bfile
+    from (
+        select
+            tbl_board.bno, btitle, bcontent, bwriter, bsong, bsinger,
+            regdate,updatedate, bfile
+        from
+            tbl_board, tbl_file
+        where
+            tbl_board.bno = tbl_file.bno
+        order by tbl_board.bno desc
+    ) where rownum <![CDATA[<=]]> (#{page}+1)*4
+    ) where rn > (#{page} * 4)
+    </select>
+
 	<select id="getList" resultType="BoardVO">
 		select
 			tbl_board.bno, btitle, bcontent, bwriter, bsong, bsinger, regdate,updatedate, bfile

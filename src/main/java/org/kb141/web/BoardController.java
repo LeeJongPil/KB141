@@ -103,9 +103,9 @@ public class BoardController {
 
 	@CrossOrigin // 리스트
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public List<BoardVO> home(Model model) {
+	public List<BoardVO> home(Integer page, Model model) {
 
-		return service.showList();
+		return service.showList(page);
 	}
 
 	@CrossOrigin

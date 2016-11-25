@@ -29,7 +29,7 @@ public class ServiceTest {
 
 	@Test
 	public void showList() {
-		System.out.println(service.showList());
+		System.out.println(service.showList(1));
 	}
 
 	@Test

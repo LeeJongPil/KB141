@@ -61,7 +61,7 @@ public class HomeController {
 		List<BoardVO> list = new ArrayList<BoardVO>();
 		
 		
-		return service.showList();
+		return service.showList(1);
 	}
 	
 	@CrossOrigin

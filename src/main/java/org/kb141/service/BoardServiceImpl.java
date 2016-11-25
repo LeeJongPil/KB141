@@ -21,10 +21,10 @@ public class BoardServiceImpl implements BoardService {
 
 	@Transactional
 	@Override
-	public List<BoardVO> showList() {
+	public List<BoardVO> showList(Integer page) {
 		List<BoardVO> list = null;
 		try {
-			list = dao.getList();
+            list = dao.getScroll(page);
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}

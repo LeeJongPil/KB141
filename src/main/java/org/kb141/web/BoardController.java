@@ -35,133 +35,142 @@ import com.mpatric.mp3agic.Mp3File;
 @RestController
 @Controller
 public class BoardController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
-	
+
 	@Inject
 	private BoardService service;
-	
+
 	@CrossOrigin
-	@PostMapping(value = "/uploadFile" , produces ="application/json; charset=utf-8" )
-	@ResponseBody // ���� �̸��� jsp �����Ű�� ����, ���� ���� �ִ� �� ������ ���ڿ��̶�� ��. 
-	public ID3v2 uploadFile(MultipartFile file) throws Exception{
+	@PostMapping(value = "/uploadFile", produces = "application/json; charset=utf-8")
+	@ResponseBody // ���� �̸��� jsp �����Ű�� ����, ���� ���� �ִ� �� ������
+					// ���ڿ��̶�� ��.
+	public ID3v2 uploadFile(MultipartFile file) throws Exception {
 		// spring�� ������ �����Ͱ� multipart �����͸� �ڵ����� ó���� �ش�.
 		// ���� ajax�ε� �� �����ҷ�? json or text
-		// UUID ���� ���ϸ��� show�� ������. 
-		logger.info("fileName : " + file.getOriginalFilename( ));
-		
+		// UUID ���� ���ϸ��� show�� ������.
+		logger.info("fileName : " + file.getOriginalFilename());
+
 		UUID uid = UUID.randomUUID();
-		
-		String fileName = new String(file.getOriginalFilename().getBytes("UTF-8"), "UTF-8");	// �����̸�
-		
-		String uploadName = uid+"_"+fileName;
-		
+
+		String fileName = new String(file.getOriginalFilename().getBytes("UTF-8"), "UTF-8"); // �����̸�
+
+		String uploadName = uid + "_" + fileName;
+
 		// uploadName -> uid
-		String filePath = "E:\\zzz\\mp3server\\"+uid + ".mp3";
-		
+		String filePath = "E:\\zzz\\mp3server\\" + uid + ".mp3";
+
 		System.out.println(filePath);
-		
+
 		FileOutputStream fos = new FileOutputStream(filePath);
-		
-		IOUtils.copy(file.getInputStream(),fos);
-		
+
+		IOUtils.copy(file.getInputStream(), fos);
+
 		fos.close();
-		
+
 		Mp3File songData = new Mp3File(filePath);
-		
+
 		ID3v2 songTags = songData.getId3v2Tag();
 
-		songTags.getAlbumImage(); //byte[]  �̹����� 
-		String imgPath = filePath.substring(0, filePath.length()-4)+".jpg";
+		songTags.getAlbumImage(); // byte[] �̹�����
+		String imgPath = filePath.substring(0, filePath.length() - 4) + ".jpg";
 		System.out.println(imgPath);
-		
+
 		logger.info(songTags.getArtist());
-		
-		songTags.setItunesComment(uid+"");
-		
+
+		songTags.setItunesComment(uid + "");
+
 		FileUtils.writeByteArrayToFile(new File(imgPath), songTags.getAlbumImage());
-		
+
 		return songTags;
 	}
-	
+
 	@CrossOrigin
-	@GetMapping(value="/getimage", produces={"image/jpg"})
+	@GetMapping(value = "/getimage", produces = { "image/jpg" })
 	public @ResponseBody byte[] download(String name) throws Exception {
-		InputStream in = new FileInputStream("E:\\zzz\\mp3server\\"+name+".jpg");
-		
+		InputStream in = new FileInputStream("E:\\zzz\\mp3server\\" + name + ".jpg");
+
 		return IOUtils.toByteArray(in);
 	}
-	
-	
+
 	@CrossOrigin
-	@GetMapping(value="/getmp3", produces={"audio/mpeg"})
+	@GetMapping(value = "/getmp3", produces = { "audio/mpeg" })
 	public @ResponseBody byte[] downloadMp3(String name) throws Exception {
-		InputStream in = new FileInputStream("E:\\zzz\\mp3server\\"+name+".mp3");
-		
+		InputStream in = new FileInputStream("E:\\zzz\\mp3server\\" + name + ".mp3");
+
 		return IOUtils.toByteArray(in);
 	}
-	
-	
-	
-	
-	@CrossOrigin
+
+	@CrossOrigin // 리스트
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public List<BoardVO> home(Model model) {
-		 
-		return  service.showList();
+
+		return service.showList();
 	}
-	
-	
+
 	@CrossOrigin
-	@PostMapping("/register")
-	public String writeBoard(BoardVO vo , FileVO fvo){
-		
+	@PostMapping("/register") // 등록하기
+	public String writeBoard(BoardVO vo, FileVO fvo) {
+
 		logger.info("vo: " + vo);
 		logger.info("fvo: " + fvo);
-		
-		service.register(vo , fvo);
+
+		service.register(vo, fvo);
 		return "sucess..";
 	}
-	
-	@CrossOrigin
-	@PostMapping(value ="/view" , produces ="application/json; charset=utf-8" )
-	public BoardVO viewBoard(String bno,Model model){
+
+	@CrossOrigin // 뷰화면
+	@PostMapping(value = "/view", produces = "application/json; charset=utf-8")
+	public BoardVO viewBoard(String bno, Model model) {
 		BoardVO vo = new BoardVO();
-		
+
 		logger.info(bno);
 		int no = Integer.parseInt(bno);
 
 		return service.view(no);
 	}
-	
-	@CrossOrigin
+
+	@CrossOrigin // 뷰화면
+	@PostMapping(value = "/directMusic", produces = "plain/text; charset=utf-8")
+	public String directSong(String bno, Model model) {
+		BoardVO vo = new BoardVO();
+
+		logger.info(bno);
+		int no = Integer.parseInt(bno);
+
+		vo = service.view(no);
+
+		vo.getBfile();
+
+		return vo.getBfile();
+	}
+
+	@CrossOrigin // 수정하기
 	@PostMapping("/modify")
-	public String modifyBoard(BoardVO vo , FileVO fvo){
-		
-		service.modify(vo , fvo);
+	public String modifyBoard(BoardVO vo) {
+
+		service.modify(vo);
+		logger.info("modify......" + vo);
 
 		return "success..";
 	}
-	
-	
-	@CrossOrigin
+
+	@CrossOrigin // 삭제하기
 	@PostMapping("/remove")
-	public String removeBoard(Integer num){
-		// bno로  bfile 가지고 오고,
-		
+	public String removeBoard(String bno, Model model) {
+		// bno로 bfile 가지고 오고,
+
+		logger.info(bno);
+
+		int num = Integer.parseInt(bno);
 		String fileName = service.getFileName(num);
 		service.remove(num);
-		File delJpgFile = new File("E:\\zzz\\mp3server\\" + fileName +".jpg");
-		File delMp3File = new File("E:\\zzz\\mp3server\\" + fileName +".mp3");
-		
-		if(delMp3File.delete() && delJpgFile.delete()){
-		
-			return "success";
-		}
-		return "fail";
-					
-	}
-	
-	
+		File delJpgFile = new File("E:\\zzz\\mp3server\\" + fileName + ".jpg");
+		File delMp3File = new File("E:\\zzz\\mp3server\\" + fileName + ".mp3");
 
+		delMp3File.delete(); 
+		delJpgFile.delete();
+
+			return "success";
+	}
 }

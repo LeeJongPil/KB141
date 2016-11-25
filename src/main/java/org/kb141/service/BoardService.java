@@ -10,7 +10,7 @@ public interface BoardService {
 	public List<BoardVO> showList();
 	public void register(BoardVO vo , FileVO fvo);
 	public BoardVO view(Integer bno);
-	public void modify(BoardVO vo, FileVO fvo); 
+	public void modify(BoardVO vo); 
 	public void remove(Integer bno);
 	public String getFileName(Integer bno);
 

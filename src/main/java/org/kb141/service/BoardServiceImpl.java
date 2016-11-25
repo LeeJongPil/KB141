@@ -64,13 +64,13 @@ public class BoardServiceImpl implements BoardService {
 
 	}
 
+	
 	@Transactional
 	@Override
-	public void modify(BoardVO vo, FileVO fvo) {
+	public void modify(BoardVO vo) {
 		// �닔�젙�븯�뒗 遺�遺�
 		try {
 			dao.update(vo);
-			fdao.update(fvo);
 		} catch (Throwable e) {
 			e.printStackTrace();
 

@@ -1,7 +1,6 @@
 package org.kb141.web;
 
 import java.io.File;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -14,7 +13,6 @@ import org.kb141.persistence.FileDAO;
 import org.kb141.service.BoardService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "file:src/main/webapp/WEB-INF/spring/root-context.xml" })
@@ -84,10 +82,11 @@ public class ServiceTest {
 
 	@Test
 	public void modify() {
+		
 		BoardVO vo = new BoardVO();
-		FileVO fvo = new FileVO();
+		
 
-		service.modify(vo, fvo);
+		service.modify(vo);
 	}
 
 	@Test
@@ -114,6 +113,21 @@ public class ServiceTest {
 			System.out.println("n");
 		}
 	}
+	
+	@Test
+	public void replace(){
+		
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	/*
